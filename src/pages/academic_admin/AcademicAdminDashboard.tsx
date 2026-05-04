@@ -205,7 +205,7 @@ export default function AcademicAdminDashboard({ profile }: { profile: any }) {
       if (feedback) {
         updateData.feedback = feedback;
       }
-      const quizToUpdate = stats.instructorQuizzes.find((q: any) => q.id === quizId);
+      const quizToUpdate = stats.recentQuizzes?.find((q: any) => q.id === quizId);
 
       await updateDoc(doc(db, 'quizzes', quizId), updateData);
 
