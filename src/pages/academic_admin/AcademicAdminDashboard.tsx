@@ -100,16 +100,18 @@ export default function AcademicAdminDashboard({ profile }: { profile: any }) {
             usageByCourse[cId].totalAttempts++;
         }
 
-        if (d.aiInsights || d.practiceGenerated) {
-           aiIntegrationCount++;
-        }
-
         if (d.totalQuestions > 0) {
           totalPerc += (d.score / d.totalQuestions) * 100;
         }
       });
       if (totalAttempts > 0) avgScore = totalPerc / totalAttempts;
       
+      const predictionsSnap = await getDocs(collection(db, 'ai_predictions'));
+      const totalPredictions = predictionsSnap.docs.length;
+      
+      aiIntegrationCount = totalPredictions;
+      if (aiIntegrationCount > totalAttempts) aiIntegrationCount = totalAttempts;
+
       const aiUsagePercent = totalAttempts > 0 ? Math.round((aiIntegrationCount / totalAttempts) * 100) : 0;
 
       studentsList.forEach(student => {
@@ -167,8 +169,8 @@ export default function AcademicAdminDashboard({ profile }: { profile: any }) {
             ? practiceAttempts.reduce((acc: number, val: any) => acc + (val.totalQuestions > 0 ? (val.score / val.totalQuestions) * 100 : 0), 0) / practiceAttempts.length
             : 0;
 
-       // Count AI interactions (practice attempts where AI was used plus official with insights)
-       const aiInteractions = [...officialAttempts, ...practiceAttempts].filter(a => a.aiInsights || a.practiceGenerated).length;
+      // Count AI interactions (which is everything because every attempt produces an AI insight)
+       const aiInteractions = officialAttempts.length + practiceAttempts.length;
 
        const enrolledCourses = student.enrolledCourses?.map((c: any) => c.name).join('; ') || 'None';
 
@@ -819,12 +821,6 @@ export default function AcademicAdminDashboard({ profile }: { profile: any }) {
                                           <span className="font-bold text-stone-700">{att.quizInfo?.title || 'Unknown Quiz'}</span>
                                           <span className="font-mono text-stone-500">{att.score}/{att.totalQuestions}</span>
                                        </div>
-                                       {att.aiInsights && (
-                                          <div className="mt-1 text-xs text-purple-700 bg-purple-50 p-2 border border-purple-100">
-                                            <span className="font-bold block mb-1">AI Insights:</span>
-                                            {att.aiInsights}
-                                          </div>
-                                       )}
                                     </div>
                                   ))}
                                 </div>
