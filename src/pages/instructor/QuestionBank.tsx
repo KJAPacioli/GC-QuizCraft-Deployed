@@ -441,7 +441,7 @@ export default function QuestionBank() {
 
                   <div className="pt-4">
                     <button type="submit" disabled={isGenerating} className="w-full bg-stone-900 text-white flex items-center justify-center gap-2 p-4 font-bold uppercase tracking-widest disabled:opacity-50">
-                      {isGenerating ? <><Loader2 className="animate-spin" /> Generating...</> : 'Generate with Gemini'}
+                      {isGenerating ? <><Loader2 className="animate-spin" /> Generating...</> : 'Generate'}
                     </button>
                   </div>
                 </form>
