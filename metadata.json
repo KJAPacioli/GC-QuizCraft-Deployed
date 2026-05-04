@@ -1,0 +1,5 @@
+{
+  "name": "GC QuizCraft",
+  "description": "An AI-powered study companion for Gordon College students to generate quizzes from study materials and track proficiency.",
+  "requestFramePermissions": []
+}

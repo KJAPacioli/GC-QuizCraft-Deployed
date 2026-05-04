@@ -1,0 +1,10 @@
+{
+  "projectId": "gc-quizcraft",
+  "appId": "1:59704067975:web:6264d986edc00aea167522",
+  "apiKey": "AIzaSyBbldKdWShpsTwXGCMJOpUkBurs0rYGfuk",
+  "authDomain": "gc-quizcraft.firebaseapp.com",
+  "storageBucket": "gc-quizcraft.firebasestorage.app",
+  "messagingSenderId": "59704067975",
+  "measurementId": "",
+  "databaseURL" : "https://gc-quizcraft-default-rtdb.asia-southeast1.firebasedatabase.app"
+}

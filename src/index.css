@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Playfair Display", serif;
+}
+
+@layer base {
+  body {
+    @apply bg-stone-50 text-stone-900 antialiased;
+  }
+}
+
+@layer components {
+  .brutal-border {
+    border: 2px solid #1c1917;
+    box-shadow: 4px 4px 0px 0px rgba(28, 25, 23, 1);
+  }
+
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+
+  .brutal-btn {
+    @apply bg-white px-4 py-2 transition-all active:scale-95;
+    border: 2px solid #1c1917;
+    box-shadow: 4px 4px 0px 0px rgba(28, 25, 23, 1);
+  }
+  
+  .brutal-btn:hover {
+    @apply translate-x-[2px] translate-y-[2px];
+    box-shadow: none;
+  }
+}
+

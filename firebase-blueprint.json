@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Gordon College student profile information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "fullName": { "type": "string" },
+        "program": { "type": "string", "description": "Academic program (e.g., BSIT, BSCS)" },
+        "yearLevel": { "type": "string", "enum": ["1st Year", "2nd Year", "3rd Year", "4th Year"] },
+        "role": { "type": "string", "enum": ["student", "admin"] }
+      },
+      "required": ["uid", "email", "fullName", "program", "yearLevel"]
+    },
+    "Material": {
+      "title": "Material",
+      "description": "Study materials uploaded by students.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string", "description": "Extracted text content from the material" },
+        "uploadDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "content", "uploadDate"]
+    },
+    "Quiz": {
+      "title": "Quiz",
+      "description": "Generated quizzes based on materials.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "materialId": { "type": "string" },
+        "quizName": { "type": "string" },
+        "generationDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "materialId", "quizName", "generationDate"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Individual quiz questions.",
+      "type": "object",
+      "properties": {
+        "quizId": { "type": "string" },
+        "questionText": { "type": "string" },
+        "questionType": { "type": "string", "enum": ["MCQ", "TF"] },
+        "correctAnswer": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "explanation": { "type": "string" }
+      },
+      "required": ["quizId", "questionText", "questionType", "correctAnswer"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Record of a student taking a quiz.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "quizId": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" }
+      },
+      "required": ["userId", "quizId", "startTime", "endTime", "score"]
+    },
+    "UserTopicProficiency": {
+      "title": "UserTopicProficiency",
+      "description": "Tracking student proficiency in specific topics.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "topicName": { "type": "string" },
+        "proficiencyLevel": { "type": "number", "description": "0-100 scale" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "topicName", "proficiencyLevel", "lastUpdated"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/materials/{materialId}": {
+      "schema": "Material",
+      "description": "Uploaded study materials"
+    },
+    "/quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "Generated quizzes"
+    },
+    "/quizzes/{quizId}/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Questions within a quiz"
+    },
+    "/attempts/{attemptId}": {
+      "schema": "QuizAttempt",
+      "description": "Quiz attempt records"
+    },
+    "/proficiency/{profId}": {
+      "schema": "UserTopicProficiency",
+      "description": "Topic proficiency tracking"
+    }
+  }
+}
