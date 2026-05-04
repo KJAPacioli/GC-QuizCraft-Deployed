@@ -196,7 +196,7 @@ export default function Dashboard({ user, profile }: DashboardProps) {
                   No official quizzes assigned yet.
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                   {officialQuizzes.map(quiz => (
                     <div key={quiz.id} className="bg-white p-6 brutal-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
