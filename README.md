@@ -2,7 +2,7 @@
 <img width="300" height="450" alt="Meks" src="https://i.pinimg.com/736x/a9/4e/c4/a94ec4c7ebf805bf1ebb0d1f32927069.jpg"/>
 </div>
 
-# Run and deploy your AI Studio app
+# Run and deploy your app
 
 This contains everything you need to run your app locally.
 
