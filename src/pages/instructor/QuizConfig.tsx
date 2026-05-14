@@ -134,7 +134,8 @@ export default function QuizConfig() {
           correctAnswer: (q as any).correctAnswer,
           options: (q as any).options,
           explanation: (q as any).explanation,
-          topic: (q as any).topic
+          topic: (q as any).topic,
+          citations: (q as any).citations || []
         });
       }
 
