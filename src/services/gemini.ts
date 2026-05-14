@@ -11,6 +11,7 @@ export interface GeneratedQuiz {
     options: string[];
     explanation: string;
     topic: string;
+    citations?: string[];
   }[];
 }
 
@@ -20,6 +21,7 @@ export async function generateTargetedPracticeQuiz(content: string, weakArea: st
   const prompt = `Generate a targeted practice quiz with ${numQuestions} questions based on the following study material, focusing explicitly on the user's weak area: "${weakArea}". 
   Include a mix of Multiple Choice (MCQ) and True/False (TF) questions.
   For each question, provide an explanation of the correct answer and identify the specific sub-topic. Make sure the questions specifically address the concepts involved in the weak area.
+  Use Google Search to fact-check the explanations and provide a list of relevant citation URLs validating the correct answer.
   
   Material:
   ${content}`;
@@ -28,6 +30,7 @@ export async function generateTargetedPracticeQuiz(content: string, weakArea: st
     model,
     contents: prompt,
     config: {
+      tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -47,9 +50,14 @@ export async function generateTargetedPracticeQuiz(content: string, weakArea: st
                   description: "For MCQ, provide 4 options. For TF, provide ['True', 'False']."
                 },
                 explanation: { type: Type.STRING },
-                topic: { type: Type.STRING }
+                topic: { type: Type.STRING },
+                citations: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING },
+                  description: "List of reference URLs grounding the explanation."
+                }
               },
-              required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "topic"]
+              required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "topic", "citations"]
             }
           }
         },
@@ -70,6 +78,7 @@ export async function generateQuizFromContent(content: string, numQuestions: num
   const prompt = `Generate a quiz with ${numQuestions} questions based on the following study material. 
   Include a mix of Multiple Choice (MCQ) and True/False (TF) questions.
   For each question, provide an explanation of the correct answer and identify the specific sub-topic.
+  Use Google Search to fact-check the explanation for the correct answer, and include a list of relevant citation URLs from the web.
   
   Material:
   ${content}`;
@@ -78,6 +87,7 @@ export async function generateQuizFromContent(content: string, numQuestions: num
     model,
     contents: prompt,
     config: {
+      tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -97,9 +107,14 @@ export async function generateQuizFromContent(content: string, numQuestions: num
                   description: "For MCQ, provide 4 options. For TF, provide ['True', 'False']."
                 },
                 explanation: { type: Type.STRING },
-                topic: { type: Type.STRING }
+                topic: { type: Type.STRING },
+                citations: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING },
+                  description: "List of reference URLs grounding the explanation."
+                }
               },
-              required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "topic"]
+              required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "topic", "citations"]
             }
           }
         },
@@ -125,7 +140,9 @@ export async function generateBankQuestions(topic: string, count: number = 3, co
 
   let prompt = `Generate ${count} college-level multiple-choice questions about: "${topic}".
   Focus on conceptual understanding and application.
-  ${diffInstruction}`;
+  ${diffInstruction}
+  Use Google Search to fact-check the explanation for the correct answer, and include a list of relevant citation URLs from the web.
+  `;
 
   if (content.trim()) {
     prompt += `\n\nBase the questions mostly on the following reference material:\n${content.substring(0, 40000)}`;
@@ -137,6 +154,7 @@ export async function generateBankQuestions(topic: string, count: number = 3, co
     model,
     contents: prompt,
     config: {
+      tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.ARRAY,
@@ -152,9 +170,14 @@ export async function generateBankQuestions(topic: string, count: number = 3, co
               description: "Provide exactly 4 options including the correct answer."
             },
             explanation: { type: Type.STRING },
-            difficulty: { type: Type.STRING, enum: ["easy", "medium", "hard"] }
+            difficulty: { type: Type.STRING, enum: ["easy", "medium", "hard"] },
+            citations: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+              description: "List of reference URLs grounding the explanation."
+            }
           },
-          required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "difficulty"]
+          required: ["questionText", "questionType", "correctAnswer", "options", "explanation", "difficulty", "citations"]
         }
       }
     }
