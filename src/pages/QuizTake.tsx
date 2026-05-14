@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth, handleFirestoreError, OperationType } from '../firebase';
 import { collection, getDocs, getDoc, doc, addDoc } from 'firebase/firestore';
 import Navbar from '../components/Navbar';
-import { BrainCircuit, CheckCircle2, XCircle, ArrowRight, Trophy, HelpCircle, Info, Eye, Timer, TrendingUp, AlertTriangle, Target } from 'lucide-react';
+import { BrainCircuit, CheckCircle2, XCircle, ArrowRight, Trophy, HelpCircle, Info, Eye, Timer, TrendingUp, AlertTriangle, Target, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateAIInsights, generateTargetedPracticeQuiz } from '../services/gemini';
 
@@ -445,6 +445,22 @@ export default function QuizTake() {
                 <p className="text-sm leading-relaxed text-stone-700">
                   {currentQ.explanation}
                 </p>
+                {currentQ.citations && currentQ.citations.length > 0 && (
+                  <div className="mt-3">
+                    <div className="text-[10px] font-mono text-stone-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                      <Globe size={10} /> Sources
+                    </div>
+                    <ul className="text-xs text-stone-600 list-disc pl-4 space-y-1">
+                      {currentQ.citations.map((cite: string, idx: number) => (
+                        <li key={idx}>
+                          <a href={cite} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 underline break-all">
+                            {cite}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-[10px] font-mono text-stone-400 uppercase">
                     Topic: {currentQ.topic}
