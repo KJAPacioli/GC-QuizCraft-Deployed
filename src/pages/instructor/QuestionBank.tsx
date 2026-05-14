@@ -133,6 +133,7 @@ export default function QuestionBank() {
         correctAnswer: qToSave.correctAnswer,
         options: qToSave.options,
         explanation: qToSave.explanation,
+        citations: qToSave.citations || [],
         createdAt: new Date().toISOString()
       });
       // Remove from preview list
@@ -156,6 +157,7 @@ export default function QuestionBank() {
           correctAnswer: qToSave.correctAnswer,
           options: qToSave.options,
           explanation: qToSave.explanation,
+          citations: qToSave.citations || [],
           createdAt: new Date().toISOString()
         })
       );
@@ -304,6 +306,26 @@ export default function QuestionBank() {
                                 </div>
                               ))}
                             </div>
+                            
+                            <div className="mt-4 p-3 bg-white border border-stone-100 pb-3">
+                              <p className="text-xs text-stone-500">
+                                <strong className="text-stone-900 uppercase">Explanation:</strong> {q.explanation || 'No explanation provided.'}
+                              </p>
+                              {q.citations && q.citations.length > 0 && (
+                                <div className="mt-2 text-[10px] text-stone-400 font-mono">
+                                  <strong className="text-stone-600 uppercase mb-1 block">Sources:</strong>
+                                  <ul className="list-disc pl-4 space-y-1">
+                                    {q.citations.map((cite: string, cIdx: number) => (
+                                      <li key={cIdx}>
+                                        <a href={cite} target="_blank" rel="noopener noreferrer" className="text-indigo-500 hover:text-indigo-700 underline break-all">
+                                          {cite}
+                                        </a>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -441,7 +463,7 @@ export default function QuestionBank() {
 
                   <div className="pt-4">
                     <button type="submit" disabled={isGenerating} className="w-full bg-stone-900 text-white flex items-center justify-center gap-2 p-4 font-bold uppercase tracking-widest disabled:opacity-50">
-                      {isGenerating ? <><Loader2 className="animate-spin" /> Generating...</> : 'Generate'}
+                      {isGenerating ? <><Loader2 className="animate-spin" /> Generating...</> : 'Generate with Gemini'}
                     </button>
                   </div>
                 </form>
@@ -481,9 +503,25 @@ export default function QuestionBank() {
                           </div>
                         ))}
                       </div>
-                      <p className="text-xs text-stone-500 bg-white p-3 border border-stone-100">
-                        <strong className="text-stone-900 uppercase">Explanation:</strong> {q.explanation}
-                      </p>
+                      <div className="bg-white p-3 border border-stone-100">
+                        <p className="text-xs text-stone-500 mb-2">
+                          <strong className="text-stone-900 uppercase">Explanation:</strong> {q.explanation}
+                        </p>
+                        {q.citations && q.citations.length > 0 && (
+                          <div className="text-[10px] text-stone-400 font-mono">
+                            <strong className="text-stone-600 uppercase mb-1 block">Sources:</strong>
+                            <ul className="list-disc pl-4 space-y-1">
+                              {q.citations.map((cite: string, cIdx: number) => (
+                                <li key={cIdx}>
+                                  <a href={cite} target="_blank" rel="noopener noreferrer" className="text-indigo-500 hover:text-indigo-700 underline break-all">
+                                    {cite}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
